@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head lang="en">
+  <meta charset="utf-8">
+  <title>Cash Register</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
+  <script src="click.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+
+  /*#total {
+    position: absolute;
+    left: 500px;
+    bottom: 500px;
+  }*/
+
+  td, th {
+    border: 1px solid #808080;
+    text-align: center;
+    padding: 8px;
+    width: 150px;
+  }
+
+  th{
+    background: #C0C0C0;
+  }
+
+  #priceList{
+    position: absolute;
+    right: 100px;
+  }
+
+   .tablebody tr:hover{
+    background-color: #FF645D;
+  }
+
+
+  </style>
+</head>
+<body ng-app="buttons">
+  <div class="container-fluid">
+    <h1>Cash Register (with buttons)</h1>
+    <div id="buttons" ng-controller="buttonCtrl">
+      <div id="total" ng-show="totalPrice == 0">0</div>
+      <div ng-repeat="button in buttons">
+        <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px"><button id="{{button.buttonID}}" ng-click="buttonClick($event,'button.buttonID');" >{{button.label}}</button></div>
+      </div>
+      <div style="position:fixed;height:50p>x;bottom:0px;left:0px;right:0px;margin-bottom:0px"} ng-show="errorMessage != ''">
+        <div class="col-sm-12">
+          <h3 class="text-danger">{{errorMessage}}</h3>
+        </div>
+      </div>
+      <table id="priceList">
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+        </tr>
+        <tbody class="tablebody">
+        <tr ng-repeat="row in priceList">
+          <td id="{{row.itemID}}" ng-click="deleteItem($event,'row.itemID')">{{ row.itemName }}</td>
+          <td id="{{row.itemID}}" ng-click="deleteItem($event,'row.itemID')">{{ row.quantity }}</td>
+          <td id="{{row.itemID}}" ng-click="deleteItem($event,'row.itemID')">{{ row.totalPrice }}</td>
+        </tr>
+      </tbody>
+        <tr style='background-color: #94ffae'>
+          <td colspan="3">Total: {{totalPrice}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
