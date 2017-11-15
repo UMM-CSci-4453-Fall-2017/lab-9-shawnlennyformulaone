@@ -10,17 +10,18 @@ credentials.host="ids";
 
 var connection = mysql.createConnection(credentials);
 
-tables = ['supply', 'till_buttons', 'transactions'];
+tables = ['supply', 'till_buttons', 'users', 'transactions'];
 tableIndex = 0;
 
 //FOREIGN KEY (itemID) REFERENCES supply(itemID)
 supplyCreate = "CREATE TABLE IF NOT EXISTS supply (itemID INT PRIMARY KEY, itemName TEXT, price DOUBLE(5,2));";
 till_buttonsCreate = "CREATE TABLE IF NOT EXISTS till_buttons (buttonID int primary key, `left` INT, `top` INT, `width` INT, label TEXT, itemID INT);";
+usersCreate = "CREATE TABLE IF NOT EXISTS  users (userID INT PRIMARY KEY, userName TEXT, userPswd TEXT)";
 transactionsCreate = "CREATE TABLE IF NOT EXISTS transactions (itemID INT UNIQUE, quantity INT, totalPrice INT)";
-createTableCommands = [supplyCreate, till_buttonsCreate, transactionsCreate];
+createTableCommands = [supplyCreate, till_buttonsCreate, usersCreate, transactionsCreate];
 
 //datafiles
-dataFiles = ['items.txt', 'buttons.txt', 'DONTLOADFILE'];
+dataFiles = ['items.txt', 'buttons.txt', 'users.txt', 'DONTLOADFILE'];
 
 useDB(db);
 
