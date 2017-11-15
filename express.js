@@ -46,4 +46,17 @@ app.get("/deleteItem", function(req, res) { //handles the /deleteItem API
   });
 });
 
+app.get("/login", function(req, res){
+  var userName = req.param('userName');
+  var userPassword = req.param('userPassword');
+  GetButtons.checkCredentials(commandInput, userName, userPassword)
+  .then(function(result){
+    if(result.length == 1){
+      res.send(true);
+    }else{
+      res.send(false);
+    }
+  });
+});
+
 app.listen(port);

@@ -51,13 +51,11 @@ var checkSupply = function(itemID, db){
   });
 }
 
-
 var checkTransaction = function(itemID, price, db){
   //This query will insert a record into transactions table if this item hasn't been add yet or just increment the quantity of that item if it was there already
   var sql = "INSERT INTO " + db + ".transactions VALUES (" + itemID + ", " + 1 + ", " + price + ") ON DUPLICATE KEY UPDATE totalPrice = (quantity + 1)* " + price + " , quantity  = quantity+1;";
   query(mysql.format(sql));
 }
-
 
 var getTotalPrice = function(db){
   //This query will get the data from transactions table in a way so we can have itemName, itemID, quantity and the totalPrice
@@ -71,8 +69,13 @@ var deleteRow = function(db, id) {
   return query(mysql.format(sql));
 }
 
+var checkCredentials = function(db, userName, userPassword){
+  var sql = "SELECT * from "+ db + ".users WHERE userName = " + "\""+userName+ "\"" + " AND userPswd = " + "\"" + userPassword + "\"" + ";";
+  return query(mysql.format(sql));
+}
 
 exports.selectButtonRecord = selectButtonRecord;
 exports.click = checkSupply;
 exports.getTotalPrice = getTotalPrice;
 exports.deleteRow = deleteRow;
+exports.checkCredentials = checkCredentials;
