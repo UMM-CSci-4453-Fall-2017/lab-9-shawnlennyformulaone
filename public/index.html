@@ -9,13 +9,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
-
-  /*#total {
-    position: absolute;
-    left: 500px;
-    bottom: 500px;
-  }*/
-
+  
   td, th {
     border: 1px solid #808080;
     text-align: center;
@@ -32,20 +26,33 @@
     right: 100px;
   }
 
-   .tablebody tr:hover{
+  .tablebody tr:hover{
     background-color: #FF645D;
   }
 
+  #login{
+    width:200px;
+    position:absolute;
+    top: 40%;
+    left: 45%;
+
+  }
+
+  #submitButton{
+    width:200px;
+    position: relative;
+  }
 
   </style>
 </head>
 <body ng-app="buttons">
   <div class="container-fluid">
-    <h1>Cash Register (with buttons)</h1>
-    <div id="buttons" ng-controller="buttonCtrl">
+    <div id="buttons" ng-controller="buttonCtrl" ng-show='loggedIn=="true"'>
+      <button style="position:absolute;left:10px;bottom:500px" id="logout" ng-click="logout()" class="btn btn-warning" >logout</button>
+      <h1>Cash Register (with buttons)</h1>
       <div id="total" ng-show="totalPrice == 0">0</div>
       <div ng-repeat="button in buttons">
-        <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px"><button id="{{button.buttonID}}" ng-click="buttonClick($event,'button.buttonID');" >{{button.label}}</button></div>
+        <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px"><button id="{{button.buttonID}}" ng-click="buttonClick($event,'button.buttonID');" class="btn btn-info" style="width:200px;color:black">{{button.label}}</button></div>
       </div>
       <div style="position:fixed;height:50p>x;bottom:0px;left:0px;right:0px;margin-bottom:0px"} ng-show="errorMessage != ''">
         <div class="col-sm-12">
@@ -59,17 +66,32 @@
           <th>Price</th>
         </tr>
         <tbody class="tablebody">
-        <tr ng-repeat="row in priceList">
-          <td id="{{row.itemID}}" ng-click="deleteItem($event,'row.itemID')">{{ row.itemName }}</td>
-          <td id="{{row.itemID}}" ng-click="deleteItem($event,'row.itemID')">{{ row.quantity }}</td>
-          <td id="{{row.itemID}}" ng-click="deleteItem($event,'row.itemID')">{{ row.totalPrice }}</td>
-        </tr>
-      </tbody>
+          <tr ng-repeat="row in priceList">
+            <td id="{{row.itemID}}" ng-click="deleteItem($event,'row.itemID')">{{ row.itemName }}</td>
+            <td id="{{row.itemID}}" ng-click="deleteItem($event,'row.itemID')">{{ row.quantity }}</td>
+            <td id="{{row.itemID}}" ng-click="deleteItem($event,'row.itemID')">{{ row.totalPrice }}</td>
+          </tr>
+        </tbody>
         <tr style='background-color: #94ffae'>
           <td colspan="3">Total: {{totalPrice}}</td>
         </tr>
       </table>
     </div>
+  </div>
+  <div id='login' ng-controller="buttonCtrl" ng-show='loggedIn=="false"'>
+    <form>
+      <h5 class="text-danger" ng-show="wrongPassword==true">The password or username you've entered is incorrect. Try again!</h5>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+        <input id="userName" type="text" class="form-control" placeholder="UserName" ng-model='userName' onkeypress="if (event.which==13) document.getElementById('submitButton').click()">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+        <input id="userPassword" type="password" class="form-control" placeholder="Password" ng-model='userPassword' onkeypress="if (event.which==13) document.getElementById('submitButton').click()">
+      </div>
+      <br>
+      <input id=submitButton type="button" value="Login" ng-click="login(userName, userPassword)" class="btn btn-default" >
+    </form>
   </div>
 </body>
 </html>
