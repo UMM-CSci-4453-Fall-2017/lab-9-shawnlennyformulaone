@@ -74,8 +74,14 @@ var checkCredentials = function(db, userName, userPassword){
   return query(mysql.format(sql));
 }
 
+var Void = function(db){
+  var sql = "TRUNCATE " + db + ".transactions"
+  return query(mysql.format(sql));
+}
+
 exports.selectButtonRecord = selectButtonRecord;
 exports.click = checkSupply;
 exports.getTotalPrice = getTotalPrice;
 exports.deleteRow = deleteRow;
 exports.checkCredentials = checkCredentials;
+exports.Void = Void;
