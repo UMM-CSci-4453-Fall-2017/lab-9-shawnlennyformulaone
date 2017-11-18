@@ -48,7 +48,7 @@
       </table>
     </div>
   </div>
-  <div id='loginPage' ng-controller="buttonCtrl" ng-show='loggedIn=="false"'>
+  <div id='loginPage' ng-controller="buttonCtrl" ng-show='loggedIn!="true"'>
     <form>
       <h5 class="text-danger" ng-show="wrongPassword==true">The password or username you've entered is incorrect. Try again!</h5>
       <div class="input-group">
