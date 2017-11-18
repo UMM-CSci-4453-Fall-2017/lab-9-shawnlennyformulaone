@@ -59,4 +59,11 @@ app.get("/login", function(req, res){
   });
 });
 
+app.get('/void', function(req, res){
+  GetButtons.Void(commandInput)
+  .then(function(){
+    res.send();
+  });
+});
+
 app.listen(port);
