@@ -1,0 +1,66 @@
+
+  .itemButtins{
+    margin: 2px;
+  }
+
+  #tillTableButtons{
+    width:150px;
+    position:absolute;
+    top: 5%;
+    left: 60%;
+  }
+
+  .tableButton{
+    width:150px;
+    margin: 3px;
+  }
+
+  td, th {
+    border: 1px solid #808080;
+    text-align: center;
+    padding: 8px;
+    width: 150px;
+  }
+
+  th{
+    background: #C0C0C0;
+  }
+
+  #priceList{
+    position:absolute;
+    top: 20%;
+    left: 60%;
+  }
+
+  .tablebody tr:hover{
+    background-color: #FF645D;
+  }
+
+  #logout{
+    position:absolute;
+    top: 5%;
+    left: 85%
+  }
+
+  #loginPage{
+    width:200px;
+    position:absolute;
+    top: 40%;
+    left: 45%;
+  }
+
+  #submitButton{
+    width:200px;
+    position: relative;
+  }
+
+  #logoutMessage{
+    position:absolute;
+    top: 5%;
+    left: 74%;
+    font-size: 15pt;
+  }
+
+  .clickable{
+    cursor: pointer;
+  }

@@ -8,68 +8,14 @@
   <script src="click.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-
-  .itemButtins{
-    margin: 2px;
-  }
-
-  #tillTableButtons{
-    width:150px;
-    position:absolute;
-    top: 5%;
-    left: 60%;
-  }
-
-  .tableButton{
-    width:150px;
-    margin: 3px;
-  }
-
-  td, th {
-    border: 1px solid #808080;
-    text-align: center;
-    padding: 8px;
-    width: 150px;
-  }
-
-  th{
-    background: #C0C0C0;
-  }
-
-  #priceList{
-    position:absolute;
-    top: 20%;
-    left: 60%;
-  }
-
-  .tablebody tr:hover{
-    background-color: #FF645D;
-  }
-
-  #login{
-    width:200px;
-    position:absolute;
-    top: 40%;
-    left: 45%;
-  }
-
-  #submitButton{
-    width:200px;
-    position: relative;
-  }
-
-  .clickable{
-    cursor: pointer; <!-- Makes cursor recognize that rows are clickable-->
-  }
-
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body ng-app="buttons">
   <div class="container-fluid">
     <div id="buttons" ng-controller="buttonCtrl" ng-show='loggedIn=="true"'>
-      <button style="position:absolute;left:10px;bottom:500px" id="logout" ng-click="logout()" class="btn btn-warning" >logout</button>
-      <h1>Cash Register (with buttons)</h1>
+      <h1>Cash Register</h1>
+      <span id="logoutMessage" class="help-block"> Don't forget to logout!</span>
+      <button  id="logout" ng-click="logout()" class="btn btn-warning" >logout</button>
       <div ng-repeat="button in buttons">
         <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px"><button id="{{button.buttonID}}" ng-click="buttonClick($event,'button.buttonID');" class="btn btn-info itemButtons" style="width:200px;color:black">{{button.label}}</button></div>
       </div>
@@ -102,7 +48,7 @@
       </table>
     </div>
   </div>
-  <div id='login' ng-controller="buttonCtrl" ng-show='loggedIn=="false"'>
+  <div id='loginPage' ng-controller="buttonCtrl" ng-show='loggedIn=="false"'>
     <form>
       <h5 class="text-danger" ng-show="wrongPassword==true">The password or username you've entered is incorrect. Try again!</h5>
       <div class="input-group">
