@@ -17,6 +17,7 @@ function ButtonCtrl($scope,buttonApi){
   $scope.wrongPassword = false; // If user will type wrong password or username we will use this boolean to show message to user which tells him taht his input is incorrect
   $scope.login = login;
   $scope.logout=logout;
+  $scope.Void=Void;
   var price = 0;
   var loading = false;
   var TotalPrice = 0;
@@ -54,7 +55,6 @@ function ButtonCtrl($scope,buttonApi){
   }
 
   function deleteItem($event){
-    console.log("id: " + $event.target.id);
     $scope.errorMessage='';
     buttonApi.deleteItem($event.target.id)
     .success(function(){
@@ -96,12 +96,25 @@ function ButtonCtrl($scope,buttonApi){
     document.getElementById('userPassword').value = ""; // removes the text from password input
   }
 
+  function Void(){
+    $scope.errorMessage='';
+    buttonApi.Void()
+    .success(function(){
+      getTransaction()
+    })
+    .error(function(){});
+  }
+
   getTransaction();
   refreshButtons();  //make sure the buttons are loaded
 }
 
 function buttonApi($http,apiUrl){
   return{
+    Void: function(){
+      var url = apiUrl + '/void';
+      return $http.get(url);
+    },
     login: function(userName, userPassword){ //using API to send username and password to the server
       var url = apiUrl + '/login?userName='+userName+'&userPassword='+userPassword;
       return $http.get(url);

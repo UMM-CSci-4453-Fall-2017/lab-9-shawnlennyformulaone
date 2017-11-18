@@ -10,6 +10,10 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <style>
 
+  .itemButtins{
+    margin: 2px;
+  }
+
   #tillTableButtons{
     width:150px;
     position:absolute;
@@ -19,6 +23,7 @@
 
   .tableButton{
     width:150px;
+    margin: 3px;
   }
 
   td, th {
@@ -47,7 +52,6 @@
     position:absolute;
     top: 40%;
     left: 45%;
-
   }
 
   #submitButton{
@@ -67,10 +71,11 @@
       <button style="position:absolute;left:10px;bottom:500px" id="logout" ng-click="logout()" class="btn btn-warning" >logout</button>
       <h1>Cash Register (with buttons)</h1>
       <div ng-repeat="button in buttons">
-        <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px"><button id="{{button.buttonID}}" ng-click="buttonClick($event,'button.buttonID');" class="btn btn-info" style="width:200px;color:black">{{button.label}}</button></div>
+        <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px"><button id="{{button.buttonID}}" ng-click="buttonClick($event,'button.buttonID');" class="btn btn-info itemButtons" style="width:200px;color:black">{{button.label}}</button></div>
       </div>
       <div id="tillTableButtons">
-        <button  id="void"  class="btn btn-danger tableButton" >Void</button>
+        <button  id="void"  class="btn btn-danger tableButton" ng-click="Void()" >Void<i class="glyphicon glyphicon-remove"></i></button>
+        <br>
         <button  id="sale"  class="btn btn-success tableButton" >Sale<i class="glyphicon glyphicon-usd"></i></button>
       </div>
       <div style="position:fixed;height:50p>x;bottom:0px;left:0px;right:0px;margin-bottom:0px"} ng-show="errorMessage != ''">
