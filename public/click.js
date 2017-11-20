@@ -23,90 +23,94 @@ function ButtonCtrl($scope,buttonApi){
   var TotalPrice = 0;
 
   function logout(){ //Once we press the logout button this function set value `loggedIn` to false and reload the page so buttons won't be shown anymore
-    localStorage.setItem('loggedIn', false);
-    location.reload();
-  }
+  localStorage.setItem('loggedIn', false);
+  location.reload();
+}
 
-  function isLoading(){
-    return loading;
-  }
+function isLoading(){
+  return loading;
+}
 
-  function refreshButtons(){
-    loading=true;
-    $scope.errorMessage='';
-    buttonApi.getButtons()
-    .success(function(data){
-      $scope.buttons=data;
-      loading=false;
-    })
-    .error(function () {
-      $scope.errorMessage="Unable to load Buttons:  Database request failed";
-      loading=false;
-    });
-  }
+function refreshButtons(){
+  loading=true;
+  $scope.errorMessage='';
+  buttonApi.getButtons()
+  .success(function(data){
+    $scope.buttons=data;
+    loading=false;
+  })
+  .error(function () {
+    $scope.errorMessage="Unable to load Buttons:  Database request failed";
+    loading=false;
+  });
+}
 
-  function buttonClick($event){
-    $scope.errorMessage='';
-    buttonApi.clickButton($event.target.id)
-    .success(function(){
-      getTransaction()
-    })
-    .error(function(){$scope.errorMessage="Unable click";});
-  }
+function buttonClick($event){
+  var currentTime = new Date();
+  var date =  currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate(); //Month is incremenetd by one since it zero based in Javascript
+  var time = currentTime.getHours()+':'+currentTime.getMinutes()+':'+currentTime.getSeconds();
+  var timeStamp = date + ' ' + time;
+  $scope.errorMessage='';
+  buttonApi.clickButton($event.target.id, timeStamp)
+  .success(function(){
+    getTransaction()
+  })
+  .error(function(){$scope.errorMessage="Unable click";});
+}
 
-  function deleteItem($event){
-    $scope.errorMessage='';
-    buttonApi.deleteItem($event.target.id)
-    .success(function(){
-      getTransaction()
-    })
-    .error(function(){$scope.errorMessage="Unable click";});
-  }
+function deleteItem($event){
+  $scope.errorMessage='';
+  buttonApi.deleteItem($event.target.id)
+  .success(function(){
+    getTransaction()
+  })
+  .error(function(){$scope.errorMessage="Unable click";});
+}
 
-  function getTransaction(){
-    $scope.errorMessage='';
-    buttonApi.getTransaction()
-    .success(function(data){
-      console.log("About to calculate totalPrice with "+data.length+"elements");
-      for(var i = 0; i < data.length; i++){
-        TotalPrice += data[i].totalPrice;
-      }
-      $scope.totalPrice = TotalPrice;
-      $scope.priceList = data;
-      TotalPrice = 0;
-      loading=false;
-    })
-    .error(function(){$scope.errorMessage="Unable to get transactions table";});
-  }
+function getTransaction(){
+  $scope.errorMessage='';
+  buttonApi.getTransaction()
+  .success(function(data){
+    console.log("About to calculate totalPrice with "+data.length+"elements");
+    for(var i = 0; i < data.length; i++){
+      TotalPrice += data[i].totalPrice;
+    }
+    $scope.totalPrice = TotalPrice;
+    $scope.priceList = data;
+    TotalPrice = 0;
+    loading=false;
+  })
+  .error(function(){$scope.errorMessage="Unable to get transactions table";});
+}
 
-  function login(userName, userPassword){
-    $scope.errorMessage='';
-    buttonApi.login(userName, userPassword)
-    .success(function(data){
-      if(data == false){
-        $scope.wrongPassword = true; //If user type password or username wrong we set wrongPassword to true
-        localStorage.setItem('loggedIn', data);
-      }else{
-        localStorage.setItem('loggedIn', data);
-        location.reload();
-      }
-    })
-    .error(function(){});
-    document.getElementById('userName').value = ""; // removes the text from username input
-    document.getElementById('userPassword').value = ""; // removes the text from password input
-  }
+function login(userName, userPassword){
+  $scope.errorMessage='';
+  buttonApi.login(userName, userPassword)
+  .success(function(data){
+    if(data == false){
+      $scope.wrongPassword = true; //If user type password or username wrong we set wrongPassword to true
+      localStorage.setItem('loggedIn', data);
+    }else{
+      localStorage.setItem('loggedIn', data);
+      location.reload();
+    }
+  })
+  .error(function(){});
+  document.getElementById('userName').value = ""; // removes the text from username input
+  document.getElementById('userPassword').value = ""; // removes the text from password input
+}
 
-  function Void(){
-    $scope.errorMessage='';
-    buttonApi.Void()
-    .success(function(){
-      getTransaction()
-    })
-    .error(function(){});
-  }
+function Void(){
+  $scope.errorMessage='';
+  buttonApi.Void()
+  .success(function(){
+    getTransaction()
+  })
+  .error(function(){});
+}
 
-  getTransaction();
-  refreshButtons();  //make sure the buttons are loaded
+getTransaction();
+refreshButtons();  //make sure the buttons are loaded
 }
 
 function buttonApi($http,apiUrl){
@@ -127,8 +131,8 @@ function buttonApi($http,apiUrl){
       var url = apiUrl + '/buttons';
       return $http.get(url);
     },
-    clickButton: function(id){
-      var url = apiUrl+'/click?id='+id;
+    clickButton: function(id, timeStamp){
+      var url = apiUrl+'/click?id='+id+'&timestamp='+timeStamp;
       return $http.get(url);
     },
     getTransaction: function(){
