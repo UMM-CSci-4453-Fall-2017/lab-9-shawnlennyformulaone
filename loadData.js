@@ -16,7 +16,7 @@ tableIndex = 0;
 //FOREIGN KEY (itemID) REFERENCES supply(itemID)
 supplyCreate = "CREATE TABLE IF NOT EXISTS supply (itemID INT PRIMARY KEY, itemName TEXT, price DOUBLE(5,2));";
 till_buttonsCreate = "CREATE TABLE IF NOT EXISTS till_buttons (buttonID int primary key, `left` INT, `top` INT, `width` INT, label TEXT, itemID INT);";
-transactionsCreate = "CREATE TABLE IF NOT EXISTS transactions (itemID INT UNIQUE, itemName TEXT, quantity INT, totalPrice INT)";
+transactionsCreate = "CREATE TABLE IF NOT EXISTS transactions (itemID INT UNIQUE, itemName TEXT, quantity INT, totalPrice INT, `timeStamp` TIMESTAMP)";
 usersCreate = "CREATE TABLE IF NOT EXISTS  users (userID INT PRIMARY KEY, userName TEXT, userPswd TEXT)";
 archiveCreate = "CREATE TABLE IF NOT EXISTS archive (transactionID INT, userName TEXT, itemID INT, itemName TEXT, quantity TEXT, totalPrice INT, `timeStamp` TIMESTAMP)";
 createTableCommands = [supplyCreate, till_buttonsCreate, usersCreate, transactionsCreate, archiveCreate];
@@ -70,7 +70,8 @@ function truncate(tableIndex) {
 function loadDataFiles(tableIndex) {
   if(dataFiles[tableIndex] == 'DONTLOADFILE') {
     if(tableIndex == tables.length - 1) {
-        connection.end();
+        //connection.end();
+        dropExistingView();
     }
     else {
         tableIndex++;
@@ -91,26 +92,25 @@ function loadDataFiles(tableIndex) {
           createTable(tableIndex);
         }
         else {
-          connection.end();
+          //connection.end();
+          dropExistingView();
         }
       }
     });
   }
 }
 
-function loadInventory() {
-  sql = "CREATE TABLE IF NOT EXISTS supply (itemID INT PRIMARY KEY, itemName TEXT, price DOUBLE(5,2));";
-  createTable(sql, 'supply');
-
-  connection.query("LOAD DATA LOCAL INFILE 'resources/buttons.txt' INTO TABLE till_buttons;", function(err){
-    if(err) {
-      console.log("Problems with MySQL: "+err);
-      connection.end();
-    }
-    else {
-      console.log("Load DB: Success");
-      //
-    }
-  });
-
+function dropExistingView() {
+    console.log("*** DROP VIEW");
+    sql = "DROP VIEW IF EXISTS transactionSummary;";
+    connection.query(sql, function(err){
+        if(err) {
+            console.log("Problem Dropping View: " + err);
+            connection.end();
+        }
+        else {
+            console.log("Drop Success");
+            connection.end();
+        }
+    });
 }
