@@ -25,7 +25,8 @@ app.get("/buttons",function(req,res){ // handles the /buttons API
 
 app.get("/click",function(req,res){ // handles the /click API
   var id = req.param('id');// Once button is clicked it should have the `id`
-  GetButtons.click(id, commandInput) // Call function `checkSupply` from getButtons.js which updates the `transactions` table
+  var timestamp = req.param('timestamp');
+  GetButtons.click(id, timestamp, commandInput) // Call function `checkSupply` from getButtons.js which updates the `transactions` table
   .then(function(){
        res.send(); // Sends empty response back once finishes the updating
      });
