@@ -10,20 +10,19 @@ credentials.host="ids";
 
 var connection = mysql.createConnection(credentials);
 
-tables = ['supply', 'till_buttons', 'transactions', 'users', 'archive', 'clickTimes'];
+tables = ['supply', 'till_buttons', 'transactions', 'users', 'archive'];
 tableIndex = 0;
 
 //FOREIGN KEY (itemID) REFERENCES supply(itemID)
 supplyCreate = "CREATE TABLE IF NOT EXISTS supply (itemID INT PRIMARY KEY, itemName TEXT, price DOUBLE(5,2));";
 till_buttonsCreate = "CREATE TABLE IF NOT EXISTS till_buttons (buttonID int primary key, `left` INT, `top` INT, `width` INT, label TEXT, itemID INT);";
-transactionsCreate = "CREATE TABLE IF NOT EXISTS transactions (itemID INT UNIQUE, itemName TEXT, quantity INT, totalPrice INT)";
+transactionsCreate = "CREATE TABLE IF NOT EXISTS transactions (itemID INT UNIQUE, itemName TEXT, quantity INT, totalPrice INT, `timeStamp` TIMESTAMP)";
 usersCreate = "CREATE TABLE IF NOT EXISTS  users (userID INT PRIMARY KEY, userName TEXT, userPswd TEXT)";
 archiveCreate = "CREATE TABLE IF NOT EXISTS archive (transactionID INT, userName TEXT, itemID INT, itemName TEXT, quantity TEXT, totalPrice INT, `timeStamp` TIMESTAMP)";
-clickTimesCreate = "CREATE TABLE IF NOT EXISTS clickTimes (itemID INT, `timeStamp` TIMESTAMP)";
-createTableCommands = [supplyCreate, till_buttonsCreate, transactionsCreate, usersCreate, archiveCreate, clickTimesCreate];
+createTableCommands = [supplyCreate, till_buttonsCreate, transactionsCreate, usersCreate, archiveCreate];
 
 //datafiles
-dataFiles = ['items.txt', 'buttons.txt', 'DONTLOADFILE', 'users.txt', 'DONTLOADFILE', 'DONTLOADFILE'];
+dataFiles = ['items.txt', 'buttons.txt', 'DONTLOADFILE', 'users.txt', 'DONTLOADFILE'];
 
 useDB(db);
 
