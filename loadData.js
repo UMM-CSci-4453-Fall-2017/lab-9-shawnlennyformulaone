@@ -10,18 +10,19 @@ credentials.host="ids";
 
 var connection = mysql.createConnection(credentials);
 
-tables = ['supply', 'till_buttons', 'users', 'transactions'];
+tables = ['supply', 'till_buttons', 'transactions', 'users', 'archive'];
 tableIndex = 0;
 
 //FOREIGN KEY (itemID) REFERENCES supply(itemID)
 supplyCreate = "CREATE TABLE IF NOT EXISTS supply (itemID INT PRIMARY KEY, itemName TEXT, price DOUBLE(5,2));";
 till_buttonsCreate = "CREATE TABLE IF NOT EXISTS till_buttons (buttonID int primary key, `left` INT, `top` INT, `width` INT, label TEXT, itemID INT);";
+transactionsCreate = "CREATE TABLE IF NOT EXISTS transactions (itemID INT UNIQUE, itemName TEXT, quantity INT, totalPrice INT, `timeStamp` TIMESTAMP)";
 usersCreate = "CREATE TABLE IF NOT EXISTS  users (userID INT PRIMARY KEY, userName TEXT, userPswd TEXT)";
-transactionsCreate = "CREATE TABLE IF NOT EXISTS transactions (itemID INT UNIQUE, quantity INT, totalPrice INT)";
-createTableCommands = [supplyCreate, till_buttonsCreate, usersCreate, transactionsCreate];
+archiveCreate = "CREATE TABLE IF NOT EXISTS archive (transactionID INT, userName TEXT, itemID INT, itemName TEXT, quantity TEXT, totalPrice INT, `timeStamp` TIMESTAMP)";
+createTableCommands = [supplyCreate, till_buttonsCreate, usersCreate, transactionsCreate, archiveCreate];
 
 //datafiles
-dataFiles = ['items.txt', 'buttons.txt', 'users.txt', 'DONTLOADFILE'];
+dataFiles = ['items.txt', 'buttons.txt', 'DONTLOADFILE', 'users.txt', 'DONTLOADFILE'];
 
 useDB(db);
 
@@ -40,6 +41,7 @@ function useDB(db) {
 }
 
 function createTable(tableIndex) {
+  console.log("*** TABLE: " + tables[tableIndex]);
   connection.query(createTableCommands[tableIndex], function(err) {
     if(err) {
       console.log("Problems with MySQL: "+err);
@@ -67,7 +69,14 @@ function truncate(tableIndex) {
 
 function loadDataFiles(tableIndex) {
   if(dataFiles[tableIndex] == 'DONTLOADFILE') {
-    connection.end();
+    if(tableIndex == tables.length - 1) {
+        //connection.end();
+        dropExistingView();
+    }
+    else {
+        tableIndex++;
+        createTable(tableIndex);
+    }
   }
   else {
   //  fileName = "\'" + dataFiles
@@ -83,26 +92,25 @@ function loadDataFiles(tableIndex) {
           createTable(tableIndex);
         }
         else {
-          connection.end();
+          //connection.end();
+          dropExistingView();
         }
       }
     });
   }
 }
 
-function loadInventory() {
-  sql = "CREATE TABLE IF NOT EXISTS supply (itemID INT PRIMARY KEY, itemName TEXT, price DOUBLE(5,2));";
-  createTable(sql, 'supply');
-
-  connection.query("LOAD DATA LOCAL INFILE 'resources/buttons.txt' INTO TABLE till_buttons;", function(err){
-    if(err) {
-      console.log("Problems with MySQL: "+err);
-      connection.end();
-    }
-    else {
-      console.log("Load DB: Success");
-      //
-    }
-  });
-
+function dropExistingView() {
+    console.log("*** DROP VIEW");
+    sql = "DROP VIEW IF EXISTS transactionSummary;";
+    connection.query(sql, function(err){
+        if(err) {
+            console.log("Problem Dropping View: " + err);
+            connection.end();
+        }
+        else {
+            console.log("Drop Success");
+            connection.end();
+        }
+    });
 }
