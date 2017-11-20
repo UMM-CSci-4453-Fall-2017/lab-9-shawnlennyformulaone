@@ -93,9 +93,15 @@ var Void = function(db){
     return query(mysql.format(sql));
 }
 
+var voidClickTimes = function(db) {
+    var sql = 'TRUNCATE ' + db + '.clickTimes';
+    return query(mysql.format(sql));
+}
+
 exports.selectButtonRecord = selectButtonRecord;
 exports.click = checkSupply;
 exports.getTotalPrice = getTotalPrice;
 exports.deleteRow = deleteRow;
 exports.checkCredentials = checkCredentials;
 exports.Void = Void;
+exports.voidClickTimes = voidClickTimes;
