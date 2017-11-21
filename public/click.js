@@ -18,6 +18,7 @@ function ButtonCtrl($scope,buttonApi){
   $scope.login = login;
   $scope.logout=logout;
   $scope.Void=Void;
+  $scope.sale=sale;
   var price = 0;
   var loading = false;
   var TotalPrice = 0;
@@ -91,6 +92,7 @@ function login(userName, userPassword){
       $scope.wrongPassword = true; //If user type password or username wrong we set wrongPassword to true
       localStorage.setItem('loggedIn', data);
     }else{
+      localStorage.setItem('currentUser', userName);
       localStorage.setItem('loggedIn', data);
       location.reload();
     }
@@ -109,12 +111,26 @@ function Void(){
   .error(function(){});
 }
 
+function sale(){
+  var currentUser = localStorage.getItem('currentUser');
+  $scope.errorMessage='';
+  buttonApi.sale(currentUser)
+  .success(function(){
+    getTransaction()
+  })
+  .error(function(){});
+}
+
 getTransaction();
 refreshButtons();  //make sure the buttons are loaded
 }
 
 function buttonApi($http,apiUrl){
   return{
+    sale: function(userName){
+      var url = apiUrl + '/sale?userName=' + userName;
+      return $http.get(url);
+    },
     Void: function(){
       var url = apiUrl + '/void';
       return $http.get(url);
@@ -131,8 +147,8 @@ function buttonApi($http,apiUrl){
       var url = apiUrl + '/buttons';
       return $http.get(url);
     },
-    clickButton: function(id, timeStamp){
-      var url = apiUrl+'/click?id='+id+'&timestamp='+timeStamp;
+    clickButton: function(id, timeStamp, currentUser){
+      var url = apiUrl + '/click?id=' + id + '&timestamp=' + timeStamp;
       return $http.get(url);
     },
     getTransaction: function(){
