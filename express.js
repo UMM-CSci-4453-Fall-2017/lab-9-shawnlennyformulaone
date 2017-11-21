@@ -28,8 +28,8 @@ app.get("/click",function(req,res){ // handles the /click API
   var timestamp = req.param('timestamp');
   GetButtons.click(id, timestamp, commandInput) // Call function `checkSupply` from getButtons.js which updates the `transactions` table
   .then(function(){
-       res.send(); // Sends empty response back once finishes the updating
-     });
+    res.send(); // Sends empty response back once finishes the updating
+  });
 });
 
 app.get("/transactions", function(req, res){ // handles the /transactions API
@@ -63,7 +63,18 @@ app.get("/login", function(req, res){
 app.get('/void', function(req, res){
   GetButtons.Void(commandInput)
   .then(function() {
-      res.send();
+    res.send();
+  });
+});
+
+app.get('/sale', function(req, res){
+  var currentUser = req.param('userName');
+  GetButtons.sale(commandInput, currentUser)
+  .then(function(){
+    GetButtons.Void(commandInput)
+  })
+  .then(function() {
+    res.send();
   });
 });
 
