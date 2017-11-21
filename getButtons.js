@@ -81,9 +81,16 @@ var Void = function(db){
   return query(mysql.format(sql));
 }
 
+var sale = function(db, userName){
+  console.log("here");
+  var sql = "call " + db + ".saleProcedure(" + "\"" + userName + "\"" + ");";
+  return query(mysql.format(sql));
+}
+
 exports.selectButtonRecord = selectButtonRecord;
 exports.click = checkSupply;
 exports.getTotalPrice = getTotalPrice;
 exports.deleteRow = deleteRow;
 exports.checkCredentials = checkCredentials;
 exports.Void = Void;
+exports.sale = sale;
