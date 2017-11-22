@@ -82,7 +82,6 @@ var Void = function(db){
 }
 
 var sale = function(db, userName){
-  console.log("here");
   var sql = "call " + db + ".saleProcedure(" + "\"" + userName + "\"" + ");";
   return query(mysql.format(sql));
 }
