@@ -46,6 +46,32 @@
           <td colspan="3">Total: {{totalPrice}}<i class="glyphicon glyphicon-usd"></i></td>
         </tr>
       </table>
+
+      <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close"><i class="glyphicon glyphicon-remove"></i></span>
+        <h2 id="receiptTitle">Your receipt!</h2>
+        <table border="0" id="receiptTable">
+          <tr>
+            <th class="receiptStatus">Item</th>
+            <th class="receiptStatus">Quantity</th>
+            <th class="receiptStatus">Price</th>
+          </tr>
+          <tr ng-repeat="row in receipt.items">
+            <td class="receiptStatus">{{ row.itemName }}</td>
+            <td class="receiptStatus">{{ row.quantity }}</td>
+            <td class="receiptStatus">{{ row.totalPrice }} <i class="glyphicon glyphicon-usd"></i></td>
+          </tr>
+          <tr >
+            <td class="receiptStatus" colspan="3"> </td>
+            <td class="receiptStatus" colspan="3">Total: {{receipt.totalPrice}} <i class="glyphicon glyphicon-usd"></i></td>
+          </tr>
+        </table>
+        <p>Cashier: {{receipt.user}}</p>
+        <p>Date: {{receipt.date}}</p>
+      </div>
+    </div>
+
     </div>
   </div>
   <div id='loginPage' ng-controller="buttonCtrl" ng-show='loggedIn!="true"'>

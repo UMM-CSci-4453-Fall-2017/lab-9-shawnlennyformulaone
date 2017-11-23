@@ -19,6 +19,7 @@ function ButtonCtrl($scope,buttonApi){
   $scope.logout=logout;
   $scope.Void=Void;
   $scope.sale=sale;
+  $scope.receipt = {};
   var price = 0;
   var loading = false;
   var TotalPrice = 0;
@@ -112,11 +113,28 @@ function Void(){
 }
 
 function sale(){
+  var currentTime = new Date();
+  var date =  currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate(); //Month is incremenetd by one since it zero based in Javascript
+  var time = currentTime.getHours()+':'+currentTime.getMinutes()+':'+currentTime.getSeconds();
+  var timeStamp = date + ' ' + time;
+
   var currentUser = localStorage.getItem('currentUser');
+  var modal = document.getElementById('myModal');
+  var span = document.getElementsByClassName("close")[0];
+
   $scope.errorMessage='';
   buttonApi.sale(currentUser)
-  .success(function(){
-    getTransaction()
+  .success(function(receipt){
+    receipt.user = currentUser;
+    receipt.totalPrice = $scope.totalPrice;
+    receipt.date = timeStamp;
+    $scope.receipt = receipt;
+    console.log( $scope.receipt);
+    Void();
+    modal.style.display = "block";
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
   })
   .error(function(){});
 }
