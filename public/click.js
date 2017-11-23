@@ -49,32 +49,32 @@ function refreshButtons(){
 }
 
 function buttonClick($event){
+  //time stamp set up
   var currentTime = new Date();
   var date =  currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate(); //Month is incremenetd by one since it zero based in Javascript
   var time = currentTime.getHours()+':'+currentTime.getMinutes()+':'+currentTime.getSeconds();
-  var timeStamp = date + ' ' + time;
+  var timeStamp = date + ' ' + time; //date is (year, month, day) and time is (hour, minute, second)
+
   $scope.errorMessage='';
-  buttonApi.clickButton($event.target.id, timeStamp)
+  buttonApi.clickButton($event.target.id, timeStamp) //clickButton sends api request to the server. Then server updates the transaction table in the database
   .success(function(){
-    getTransaction()
+    getTransaction() // refresh till
   })
   .error(function(){$scope.errorMessage="Unable click";});
 }
 
 function deleteItem($event){
   $scope.errorMessage='';
-  buttonApi.deleteItem($event.target.id)
+  buttonApi.deleteItem($event.target.id) //deleteItem sends request to the server. Then server deletes the item from 'transactions' table
   .success(function(){
-    getTransaction()
+    getTransaction() // refresh till
   })
   .error(function(){$scope.errorMessage="Unable click";});
 }
 
-
-//This function refreshes the till (gets the latest record from 'transactions' table)
 function getTransaction(){
   $scope.errorMessage='';
-  buttonApi.getTransaction()
+  buttonApi.getTransaction() // Sends request to the server. The server sends query (select * from 'transactions' table) thus gets the lates status of records in this table
   .success(function(items){
     for(var i = 0; i < items.length; i++){ //This for loop calculates the total price
       TotalPrice += items[i].totalPrice;
@@ -93,14 +93,14 @@ function login(userName, userPassword){
   .success(function(data){
     if(data == false){
       $scope.wrongPassword = true; //If user type password or username wrong we set wrongPassword to true
-      localStorage.setItem('loggedIn', data);
+      localStorage.setItem('loggedIn', false);
     }else{
       localStorage.setItem('currentUser', userName);
-      localStorage.setItem('loggedIn', data);
+      localStorage.setItem('loggedIn', true);
       location.reload();
     }
   })
-  .error(function(){});
+  .error(function(){$scope.errorMessage="Unable to Login";});
   document.getElementById('userName').value = ""; // removes the text from username input
   document.getElementById('userPassword').value = ""; // removes the text from password input
 }
@@ -123,16 +123,18 @@ function sale(){
   var currentUser = localStorage.getItem('currentUser');
   var modal = document.getElementById('myModal');
   var span = document.getElementsByClassName("close")[0];
+  var receipt  = {};
 
   if($scope.totalPrice > 0){
     $scope.errorMessage='';
     buttonApi.sale(currentUser)
-    .success(function(receipt){
+    .success(function(){
+      receipt.items = $scope.priceList;
       receipt.user = currentUser;
       receipt.totalPrice = $scope.totalPrice;
       receipt.date = timeStamp;
       $scope.receipt = receipt;
-      Void();
+      getTransaction();
       modal.style.display = "block";
       span.onclick = function() {
         modal.style.display = "none";
