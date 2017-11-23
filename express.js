@@ -69,12 +69,14 @@ app.get('/void', function(req, res){
 
 app.get('/sale', function(req, res){
   var currentUser = req.param('userName');
+  var receipt = {};
   GetButtons.sale(commandInput, currentUser)
   .then(function(){
-    GetButtons.Void(commandInput)
-  })
-  .then(function() {
-    res.send();
+    GetButtons.getTotalPrice(commandInput)
+    .then(function(data) {
+      receipt.items = data;
+      res.send(receipt);
+    });
   });
 });
 
