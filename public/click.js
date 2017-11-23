@@ -20,6 +20,7 @@ function ButtonCtrl($scope,buttonApi){
   $scope.Void=Void;
   $scope.sale=sale;
   $scope.receipt = {};
+  $scope.emptyTill = false; //this variable is used for the case when user will try press sale when the till is empty
   var price = 0;
   var loading = false;
   var TotalPrice = 0;
@@ -69,16 +70,17 @@ function deleteItem($event){
   .error(function(){$scope.errorMessage="Unable click";});
 }
 
+
+//This function refreshes the till (gets the latest record from 'transactions' table)
 function getTransaction(){
   $scope.errorMessage='';
   buttonApi.getTransaction()
-  .success(function(data){
-    console.log("About to calculate totalPrice with "+data.length+"elements");
-    for(var i = 0; i < data.length; i++){
-      TotalPrice += data[i].totalPrice;
+  .success(function(items){
+    for(var i = 0; i < items.length; i++){ //This for loop calculates the total price
+      TotalPrice += items[i].totalPrice;
     }
     $scope.totalPrice = TotalPrice;
-    $scope.priceList = data;
+    $scope.priceList = items; //array of items
     TotalPrice = 0;
     loading=false;
   })
@@ -122,21 +124,24 @@ function sale(){
   var modal = document.getElementById('myModal');
   var span = document.getElementsByClassName("close")[0];
 
-  $scope.errorMessage='';
-  buttonApi.sale(currentUser)
-  .success(function(receipt){
-    receipt.user = currentUser;
-    receipt.totalPrice = $scope.totalPrice;
-    receipt.date = timeStamp;
-    $scope.receipt = receipt;
-    console.log( $scope.receipt);
-    Void();
-    modal.style.display = "block";
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-  })
-  .error(function(){});
+  if($scope.totalPrice > 0){
+    $scope.errorMessage='';
+    buttonApi.sale(currentUser)
+    .success(function(receipt){
+      receipt.user = currentUser;
+      receipt.totalPrice = $scope.totalPrice;
+      receipt.date = timeStamp;
+      $scope.receipt = receipt;
+      Void();
+      modal.style.display = "block";
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+    })
+    .error(function(){});
+  }else{
+    $scope.emptyTill = true;
+  }
 }
 
 getTransaction();

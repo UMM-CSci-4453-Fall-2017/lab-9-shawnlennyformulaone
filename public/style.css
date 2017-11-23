@@ -36,10 +36,22 @@ th{
   border: 0;
   background-color: #fefefe;
   text-align: left;
+  width: 30px;
+}
+
+#receiptTotalPriceStatus{
+  border: 0;
+  background-color: #fefefe;
+  text-align: center;
 }
 
 .tablebody tr:hover{
   background-color: #FF645D;
+}
+
+.receiptData{
+  text-align: right;
+  font-weight: bold;
 }
 
 #logout{
@@ -87,13 +99,17 @@ th{
   text-align: center;
 }
 
+#emptyTillMessage{
+  text-align: center;
+}
+
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 60%;
-  height: 40%;
+  width: 50%;
+  height: 60%;
 }
 
 .close {
