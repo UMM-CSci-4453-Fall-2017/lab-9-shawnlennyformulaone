@@ -47,36 +47,34 @@ app.get("/deleteItem", function(req, res) { //handles the /deleteItem API
   });
 });
 
-app.get("/login", function(req, res){
-  var userName = req.param('userName');
-  var userPassword = req.param('userPassword');
-  GetButtons.checkCredentials(commandInput, userName, userPassword)
-  .then(function(result){
-    if(result.length == 1){
-      res.send(true);
+app.get("/login", function(req, res){ //handles the /login API
+  var userName = req.param('userName'); //url will contain userName
+  var userPassword = req.param('userPassword'); //url will contain userPassword
+  GetButtons.checkCredentials(commandInput, userName, userPassword) //checkCredentials function will send query to the database and will return row which matches
+  .then(function(result){ //then we check the result
+    if(result.length == 1){ //if result is 1, that means there is such row thus this user is valid
+      res.send(true); //if user is valid the true will be sent
     }else{
-      res.send(false);
+      res.send(false);// otherwise false will be sent
     }
   });
 });
 
-app.get('/void', function(req, res){
-  GetButtons.Void(commandInput)
+app.get('/void', function(req, res){ //handles the /void API
+  GetButtons.Void(commandInput) // Void function will truncate the transaction table
   .then(function() {
     res.send();
   });
 });
 
-app.get('/sale', function(req, res){
-  var currentUser = req.param('userName');
-  var receipt = {};
-  GetButtons.sale(commandInput, currentUser)
+app.get('/sale', function(req, res){// handles the /sale API
+  var currentUser = req.param('userName'); //the url will contain the currentUser who pressed the "sale" button
+  GetButtons.sale(commandInput, currentUser) //sale function will call saleProcedure
   .then(function(){
-    GetButtons.getTotalPrice(commandInput)
-    .then(function(data) {
-      receipt.items = data;
-      res.send(receipt);
-    });
+     GetButtons.Void(commandInput) //once sale is done we void 'transaction' table
+     .then(function () {
+       res.send();
+     })
   });
 });
 

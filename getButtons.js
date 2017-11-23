@@ -72,16 +72,19 @@ var deleteRow = function(db, id) {
 }
 
 var checkCredentials = function(db, userName, userPassword){
+  //This query will select row from the "users" table where 'userName' and 'userPassword' match.
   var sql = "SELECT * from "+ db + ".users WHERE userName = " + "\""+userName+ "\"" + " AND userPswd = " + "\"" + userPassword + "\"" + ";";
   return query(mysql.format(sql));
 }
 
 var Void = function(db){
+  //This query will truncate transactions table (for 'void' button)
   var sql = "TRUNCATE " + db + ".transactions"
   return query(mysql.format(sql));
 }
 
 var sale = function(db, userName){
+  //this query will call saleProcedure, which will copy record from 'transaction' table and paste it into 'archive' table. It also will add transactionID and userName
   var sql = "call " + db + ".saleProcedure(" + "\"" + userName + "\"" + ");";
   return query(mysql.format(sql));
 }
