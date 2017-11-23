@@ -107,40 +107,42 @@ function login(userName, userPassword){
 
 function Void(){
   $scope.errorMessage='';
-  buttonApi.Void()
+  buttonApi.Void() //sends request to the server to truncate the "transactions" table
   .success(function(){
-    getTransaction()
+    getTransaction() //refresh till
   })
   .error(function(){});
 }
 
 function sale(){
+  //time stamp set up
   var currentTime = new Date();
   var date =  currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate(); //Month is incremenetd by one since it zero based in Javascript
   var time = currentTime.getHours()+':'+currentTime.getMinutes()+':'+currentTime.getSeconds();
   var timeStamp = date + ' ' + time;
 
+  //receipt set up
   var currentUser = localStorage.getItem('currentUser');
-  var modal = document.getElementById('myModal');
-  var span = document.getElementsByClassName("close")[0];
+  var modal = document.getElementById('myModal'); // corresponds to pop up receipt
+  var span = document.getElementsByClassName("close")[0]; // X button
   var receipt  = {};
 
   if($scope.totalPrice > 0){
     $scope.errorMessage='';
     buttonApi.sale(currentUser)
     .success(function(){
-      receipt.items = $scope.priceList;
-      receipt.user = currentUser;
-      receipt.totalPrice = $scope.totalPrice;
-      receipt.date = timeStamp;
-      $scope.receipt = receipt;
-      getTransaction();
-      modal.style.display = "block";
-      span.onclick = function() {
+      receipt.items = $scope.priceList; // receipt object will have "items" field which is an array of items in the cash till
+      receipt.user = currentUser; //receipt object will have "user" field so receipt can show who was the cashier
+      receipt.totalPrice = $scope.totalPrice; // total price for receipt
+      receipt.date = timeStamp; // date for receipt
+      $scope.receipt = receipt; // now receipt object in the scope so it can be  used in html especially in (pop up receipt)
+      getTransaction(); //refresh till
+      modal.style.display = "block"; // once 'sale' button is clicked the modal will be displayed  (pop up receipt)
+      span.onclick = function() { // There X button if its clicked then pop up window will dissapear
         modal.style.display = "none";
       }
     })
-    .error(function(){});
+    .error(function(){$scope.errorMessage="Unable to sale";});
   }else{
     $scope.emptyTill = true;
   }
@@ -152,7 +154,7 @@ refreshButtons();  //make sure the buttons are loaded
 
 function buttonApi($http,apiUrl){
   return{
-    sale: function(userName){
+    sale: function(userName){ // userName is also in the url since our saleProcedure takes it as argument and inserts into 'archive' table
       var url = apiUrl + '/sale?userName=' + userName;
       return $http.get(url);
     },
