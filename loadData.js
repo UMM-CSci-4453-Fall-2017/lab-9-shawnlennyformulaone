@@ -110,6 +110,28 @@ function dropExistingView() {
         }
         else {
             console.log("Drop Success");
+            createTransactionSummary();
+        }
+    });
+}
+
+function createTransactionSummary() {
+    console.log("*** CREATE VIEW: transactionSummary");
+
+    sql = "CREATE VIEW transactionSummary  " +
+    "AS SELECT A.transactionID, MIN(A.timeStamp) startTime," +
+    "MAX(A.timeStamp) stopTime, " +
+    "TIMESTAMPDIFF(second, MIN(A.timeStamp), MAX(A.timeStamp)) duration, " +
+    "A.userName, SUM(A.totalPrice) totalPrice " +
+    "from archive A GROUP BY A.transactionID;";
+
+    connection.query(sql, function(err){
+        if(err) {
+            console.log("Problem Creating View: " + err);
+            connection.end();
+        }
+        else {
+            console.log("Create Success");
             connection.end();
         }
     });
