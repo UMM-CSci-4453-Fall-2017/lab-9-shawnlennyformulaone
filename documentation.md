@@ -75,13 +75,16 @@ If you want to remove the item from till simply click on it
 
 You can also click `void` button if you want to remove everything from the till.
 
-Once you ready to pzurchase click `sale` button and you can receive your receipt.
+Once you ready to purchase click `sale` button and you can receive your receipt.
 
 ![receipt](img/receiptManual.png)
 
 ## Appendix: API <a id="api"></a>
-There are four API end points that have been implemented in an effort to satisfy the requirements for the lab 8 REST API. The following are listed.
+
 * **GetButtons:** `/buttons`. Gets buttons from the `till_buttons` table. This is called whenever the page is reloaded.
 * **ClickButton:** `/click?id=`. When a button is clicked, it passes an `itemID`. This id is sent via the API to `express.js` which in turn, uses the API to update the `transactions` table. If the `transactions` table does not have a record with the passed in `itemID`, it will fetch the itemName, and individual price from the `supply` table. If the table does have a record with `itemID` in it, it will update the quantity and totalPrice for that item.  
-* **GetTransaction:** `/transactions`. This is called after the client side gets confirmation that the database has been successfully updated. It tells the server side to send all records int the `transactions` table.  
+* **GetTransaction:** `/transactions`. This is called after the client side gets confirmation that the database has been successfully updated. It tells the server side to send all records from the `transactions` table.  
 * **DeleteItem:** `/deleteItem?id=`. This is called when the employee clicks on the price list table on the front end. This triggers the front end to use the deleteItem API request using the item-id of the item in the priceList table. This value gets passed to the server side, where the item is deleted from the `transactions` table.
+* **Login:** `/login?userName=<yourUserName>&password=<yourPassword>`. This is called when user is trying to login. The front end sends the username and user's password to the server and server checks if such username is stored in the `users` table in database. If such username and password exists server sends `true` back to the front end so the user can successfully login
+* **Void:** `/void`. This is called when user clicks the `void` button. Front end sends this API request to the server side, then server truncates the `transactions` table in the database.
+* **Sale:** `/sale?userName`. This is called when `sale` button is clicked. Once server receives this API request from the front end it calls the `saleProcedure` which copies data from the `transactions` table and stores it in the `archive` table. This API request also contains the current username so we can keep track of who proceeded the transaction.  
