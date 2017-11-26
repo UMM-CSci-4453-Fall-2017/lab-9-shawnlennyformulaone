@@ -18,6 +18,11 @@ npm install mysql
 npm install bluebird
 npm install express
 ```
+You also need to create procedure in the database. For that from the project's top directory connect to maria db and run "SOURCE saleProcedure.sql"
+Should look like this:
+``` SQL
+MatriaDB [<your_database_name>]> SOURCE saleProcedure.sql
+```
 
 ### Running <a id="running"></a>
 To run the server go to the project top directory and run in the shell:
@@ -28,7 +33,7 @@ To run the server go to the project top directory and run in the shell:
  This script assumes that the location of your credentials (to log onto the database), is named `credentials.json` which should look like this:
 
  ``` json
- {
+{
   "user": "your username",
   "password": "your password"
 }
