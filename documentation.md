@@ -17,7 +17,7 @@ To run the server go to the project top directory and run in the shell:
 
   The `buttons.txt` is used for `till_buttons` table which has the following structure:
 
-```
+``` SQL
 +----------+---------+------+-----+---------+-------+
 | Field    | Type    | Null | Key | Default | Extra |
 +----------+---------+------+-----+---------+-------+
@@ -30,7 +30,7 @@ To run the server go to the project top directory and run in the shell:
 +----------+---------+------+-----+---------+-------+
 ```
   The `items.txt` is used for `supply` table which has the following structure:
-```
+``` SQL
 +----------+---------+------+-----+---------+-------+
 | Field    | Type    | Null | Key | Default | Extra |
 +----------+---------+------+-----+---------+-------+
@@ -44,7 +44,7 @@ To run the server go to the project top directory and run in the shell:
 
 ```
   The `users.txt` is used for `users` the table that contains the usernames and their passwords. This table has the following structure:
-```
+``` SQL
 +----------+---------+------+-----+---------+-------+
 | Field    | Type    | Null | Key | Default | Extra |
 +----------+---------+------+-----+---------+-------+
@@ -61,23 +61,23 @@ Once you get there you will need to log in
 
 Type "user" for `userName` and "password" for `Password` to login
 
-![login](resources/loginManual.png)
+![login](img/loginManual.png)
 
 Once you login you will see the user interface
 
-![webPage](resources/webpageManual.png)
+![webPage](img/webpageManual.png)
 
 In order to proceed the transaction press buttons on the left to choose the items that you want to buy.
 
 If you want to remove the item from till simply click on it
 
-![remove item](resources/removeItemManual.png)
+![remove item](img/removeItemManual.png)
 
 You can also click `void` button if you want to remove everything from the till.
 
 Once you ready to pzurchase click `sale` button and you can receive your receipt.
 
-![receipt](resources/receiptManual.png)
+![receipt](img/receiptManual.png)
 
 ## Appendix: API <a id="api"></a>
 There are four API end points that have been implemented in an effort to satisfy the requirements for the lab 8 REST API. The following are listed.
