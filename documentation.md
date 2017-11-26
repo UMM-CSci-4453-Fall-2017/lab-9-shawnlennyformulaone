@@ -2,8 +2,8 @@
 
 ### Content
 * [How to run the server](#run_server)
-* [How to use the website](#chapter-2)
-* [Appendix: API](#chapter-3)
+* [How to use the website](#how_to_use)
+* [Appendix: API](#api)
 
 ## How to run the server: <a id="run_server"></a>
 To run the server go to the project top directory and run in the shell:
@@ -79,7 +79,7 @@ Once you ready to pzurchase click `sale` button and you can receive your receipt
 
 ![receipt](resources/receiptManual.png)
 
-## Appendix: API
+## Appendix: API <a id="api"></a>
 There are four API end points that have been implemented in an effort to satisfy the requirements for the lab 8 REST API. The following are listed.
 * **GetButtons:** `/buttons`. Gets buttons from the `till_buttons` table. This is called whenever the page is reloaded.
 * **ClickButton:** `/click?id=`. When a button is clicked, it passes an `itemID`. This id is sent via the API to `express.js` which in turn, uses the API to update the `transactions` table. If the `transactions` table does not have a record with the passed in `itemID`, it will fetch the itemName, and individual price from the `supply` table. If the table does have a record with `itemID` in it, it will update the quantity and totalPrice for that item.  
