@@ -23,7 +23,7 @@ npm install express
 Our project uses a stored procedure for some features; this stored procedure will need to be added to the database. To do this, move to the project's top directory, connect to maria db, and run *SOURCE saleProcedure.sql*.
 The command should look like this:
 ``` SQL
-MatriaDB [<your_database_name>] SOURCE saleProcedure.sql
+MatriaDB [<your_database_name>]> SOURCE saleProcedure.sql
 ```
 
 ### Running the Server <a id="running"></a>
